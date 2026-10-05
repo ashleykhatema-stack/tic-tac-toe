@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue sample</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+    <div id="card">
+
+        <div
+            class="bg-[url('https://i.pinimg.com/1200x/08/29/ec/0829ec097aa526ea942d516cb7b66adf.jpg')] w-full h-screen bg-cover bg-center ">
+
+            <div class="flex flex-col justify-center items-center">
+                <div class=" text-gray-50 text-center mt-10">
+                    <h1 class="text-gray-50 text-4xl mb-5 mt-20 font-bold">Tic Tac Toe</h1>
+
+                    <div>
+                        <div class=" grid grid-cols-3 p-2 gap-1 border-1 shadow-xl bg-amber-400/40 rounded-lg">
+                            <div v-for="(row,rowIndex) in cell" :key="rowIndex">
+                                <div v-for="(cell,colIndex) in row" :key="colIndex"
+                                    class="w-24 h-24 m-4 rounded-lg border-1  bg-amber-300/40 hover:bg-yellow-500/50 text-7xl font-bold text-center"
+                                    @click="clickpaper(rowIndex,colIndex)" :class="{'text-red-500': cell === 'X',
+                                             'text-blue-500': cell === 'O',
+                                            'cursor-not-allowed': cell !== '' || winner}">
+                                    {{cell}}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-white font-bold text-4xl mt-5">
+
+                            {{message}}
+                        </p>
+                    </div>
+                    <button @click="Restartbtn"
+                        class=" mt-5 text-lg font-semibold bg-amber-400/40 hover:bg-yellow-500/50 py-1 px-1 rounded-lg border-1 ">Restart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    cell: [
+                        ["", "", ""],
+                        ["", "", ""],
+                        ["", "", ""]
+                    ],
+                    message: "Player X's turn",
+                    currentPaper: 'X',
+                    winner: null
+                }
+            },
+            methods: {
+                clickpaper(row, col) {
+                    if (this.cell[row][col] !== "" || this.winner) {
+                        return;
+                    }
+
+                    this.cell[row][col] = this.currentPaper;
+
+
+                    if (this.Winner(this.currentPaper)) {
+                        this.winner = this.currentPaper;
+                        this.message = `Player ${this.currentPaper} Win's the Game`;
+
+                     } else if (this.gameDraw(this.currentPaper)) {
+                        this.message = `Game Draw`
+                        
+                    } else {
+
+                        if (this.currentPaper === 'X') {
+                            this.currentPaper = 'O';
+                            this.message = `Player O's Turn`
+
+                        } else {
+                            this.currentPaper = this.currentPaper === 'X' ? 'O' : 'X';
+                            this.message = `Player ${this.currentPaper} 's Turn`;
+                        }
+                    }
+                },
+                Winner(player) {
+                    for (let row = 0; row < this.cell.length; row++) {
+                        if (this.cell[row][0] == player
+                            && this.cell[row][1] == player
+                            && this.cell[row][2] == player) {
+
+                            return true;
+                        }
+                    }
+                    for (let col = 0; col < this.cell.length; col++) {
+                        if (this.cell[0][col] == player
+                            && this.cell[1][col] == player
+                            && this.cell[2][col] == player) {
+
+                            return true;
+                        }
+                    }
+                    if (this.cell[0][0] === player
+                        && this.cell[1][1] == player
+                        && this.cell[2][2] == player) {
+
+                        return true;
+                    }
+                    if (this.cell[0][2] === player
+                        && this.cell[1][1] == player
+                        && this.cell[2][0] == player) {
+
+                        return true;
+                    }
+                    return false;
+                },
+
+                Restartbtn() {
+                    this.cell = [
+                        ["", "", ""],
+                        ["", "", ""],
+                        ["", "", ""],
+                    ],
+                        this.currentPaper = 'X';
+                    this.message = "Player X's turn";
+                    this.winner = null;
+                },
+                gameDraw() {
+                    for (let row = 0; row < this.cell.length; row++) {
+                        for (let col = 0; col < this.cell.length; col++) {
+                            if (this.cell[row][col] === '') {
+                                return false;
+                            }
+                        }
+                    }
+                    return !this.Winner('X') && !this.Winner('O');
+
+                },
+            }
+
+        }).mount('#card');
+    </script>
+</body>
+
+</html>
