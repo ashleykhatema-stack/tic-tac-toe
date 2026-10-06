@@ -23,7 +23,7 @@
                         <div class=" grid grid-cols-3 p-2 gap-1 border-1 shadow-xl bg-amber-400/40 rounded-lg">
                             <div v-for="(row,rowIndex) in cell" :key="rowIndex">
                                 <div v-for="(cell,colIndex) in row" :key="colIndex"
-                                    class="w-24 h-24 m-4 rounded-lg border-1  bg-amber-300/40 hover:bg-yellow-500/50 text-7xl font-bold text-center"
+                                    class="w-24 h-24 m-4 rounded-lg border-1 cursor-pointer bg-amber-300/40 hover:bg-yellow-500/50 text-7xl font-bold text-center"
                                     @click="clickpaper(rowIndex,colIndex)" :class="{'text-red-500': cell === 'X',
                                              'text-blue-500': cell === 'O',
                                             'cursor-not-allowed': cell !== '' || winner}">
